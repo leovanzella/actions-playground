@@ -1,27 +1,23 @@
-name: deploy
+name: make test
 
-on: issue_comment
-
+on:
+  issue_comment:
+    types:
+      - created
 
 jobs:
-  pr_commented:
-    # This job only runs for pull request comments
-    name: PR comment
-    if: ${{ github.event.issue.pull_request }}
+  like-pizza:
     runs-on: ubuntu-latest
+    if: ${{ github.event.comment.body == 'make test'}}
     steps:
-      - run: |
-          echo A comment on PR $NUMBER
-        env:
-          NUMBER: ${{ github.event.issue.number }}
-
-  issue_commented:
-    # This job only runs for issue comments
-    name: Issue comment
-    if: ${{ !github.event.issue.pull_request }}
-    runs-on: ubuntu-latest
-    steps:
-      - run: |
-          echo A comment on issue $NUMBER
-        env:
-          NUMBER: ${{ github.event.issue.number }}
+      - name: make test
+        uses: actions/github-script@v4
+        with:
+          script: |
+            const {owner, repo} = context.issue
+            github.reactions.createForIssueComment({
+              owner,
+              repo,
+              comment_id: context.payload.comment.id,
+              content: "+1",
+            });
