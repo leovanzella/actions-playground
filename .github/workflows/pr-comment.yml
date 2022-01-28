@@ -1,9 +1,7 @@
 name: make test
 
 on:
-  issue_comment:
-    types:
-      - created
+  issue_comment
 
 jobs:
   like-pizza:
