@@ -1,7 +1,9 @@
 name: make test
 
 on:
-  issue_comment
+  issue_comment:
+    types:
+    - created
 
 jobs:
   like-pizza:
@@ -12,3 +14,7 @@ jobs:
           echo A comment on PR $NUMBER
         env:
           NUMBER: ${{ github.event.issue.number }}
+        with:
+          owner: ${{ github.repository_owner }}
+          repo: ${{ github.repository }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
